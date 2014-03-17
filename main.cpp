@@ -21,7 +21,7 @@ int main(int argc, char* argv[])
     CFilesAnalize *analizator = new CFilesAnalize();
     CReport *report           = new CReport();
 
-
+    //жопа
     //CSettings::instance().loadSettings("/etc/secnsafe/secnsafe.conf");
     //CSettings::instance().setValue("dbfolder","/etc/secnsafe"
 
