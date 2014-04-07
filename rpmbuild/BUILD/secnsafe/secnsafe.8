@@ -1,0 +1,29 @@
+.\" Manpage for secnsafe.
+.\" Contact nessus@adminofsystem.net to correct errors or typos.
+.TH man 8 "20 Feb 2014" "1.0" "secnsafe man page"
+.SH NAME
+secnsafe \- host-based IDS, security tool
+.SH SYNOPSIS
+secnsafe <-init|-check>
+.SH DESCRIPTION
+secnsafe monitors all or parts of the dynamic behavior and the state of a file system.
+.SH OPTIONS
+The secnsafe takes two options.
+.TP 5
+-init 
+will collect current state of file system.
+.TP 5
+-check 
+will compare the current state with saved one. 
+.SH EXAMPLES
+secnsafe -init	
+
+secnsafe -check | mail -s "Report fron `hostname`" nessus@adminofsystem.net
+.SH FILES
+.TP 5
+/etc/secnsafe/secnsafe.conf 
+secnsafe configuration file.
+.SH BUGS
+No known bugs.
+.SH AUTHOR
+Ruslan Yakhin (nessus@adminofsystem.net)
