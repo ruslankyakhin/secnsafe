@@ -14,14 +14,27 @@ CSettings& CSettings::instance()
 
 void CSettings::loadSettings(QString settingsFile)
 {
+    QStringList listPaths;
+
     if(QFile::exists(settingsFile)) {
         QFile file(settingsFile);
         if(file.open(QFile::ReadOnly) ) {
             while(!file.atEnd()){
                 QString line = file.readLine();
-                QStringList splitedLine = line.split("=");
-                if(splitedLine.count() > 0) {
-                    settings_[splitedLine[0]] = splitedLine[1];
+                QRegExp regExp(QRegExp::escape("[")+"(.*)"+QRegExp::escape("]"));
+
+                if(regExp.indexIn(line) != -1) {
+                    listPaths = regExp.cap(1).split(",");
+                }
+
+                QStringList keyValue = line.split("=");
+
+                if (keyValue.count() == 2)
+                {
+                    foreach(QString path, listPaths)
+                    {
+
+                    }
                 }
             }
         }
@@ -33,10 +46,11 @@ void CSettings::loadSettings(QString settingsFile)
 }
 QString CSettings::getValue(QString name)
 {
-    return settings_[name].replace("\"","").trimmed();
+   // return settings_[name].replace("\"","").trimmed();
+    return "";
 }
 
 void CSettings::setValue(QString name, QString value)
 {
-    settings_[name] = value;
+    //settings_[name] = value;
 }

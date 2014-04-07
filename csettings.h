@@ -12,7 +12,7 @@ class CSettings
 {
     private:\
         static CSettings instance_;
-        QHash<QString,QString> settings_;
+        QHash<QString,QHash<QString,QString> > settings_;
     public:
         CSettings();
         static CSettings& instance();

@@ -10,7 +10,7 @@ int main(int argc, char* argv[])
     if(argc < 2)
     {
         cout << "usage: " <<  argv[0] << " <-init|-check>" << endl;
-        return -1;
+       // return -1;
     }
 
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
@@ -26,6 +26,8 @@ int main(int argc, char* argv[])
 
     CSettings::instance().loadSettings("C:/Users/test/Documents/secnsafe/secnsafe.conf");
     CSettings::instance().setValue("dbfolder","C:/Users/test/Documents/secnsafe/");
+return -1;
+
 
     if(qstrcmp(argv[1],"-init") == 0) {
         QStringList paths = CSettings::instance().getValue("path").split(",");
