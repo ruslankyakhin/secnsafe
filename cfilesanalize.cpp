@@ -28,7 +28,7 @@ void CFilesAnalize::setFileTypes(QString fileTypes)
 void CFilesAnalize::serializeData(QString path,QHash<QString, QString> data)
 {
     QFileInfo info(path);
-    QString database = CSettings::instance().getValue("dbfolder") + "/" + info.fileName() + ".db";
+    QString database = CSettings::instance().getConfPath() + "/" + info.fileName() + ".db";
 
     QFile file(database);
     if(file.open(QIODevice::WriteOnly)){
@@ -42,7 +42,7 @@ QHash<QString, QString> CFilesAnalize::deserializeData(QString path)
 {
     QHash<QString, QString> data;
     QFileInfo info(path);
-    QString database = CSettings::instance().getValue("dbfolder") + "/" + info.fileName() + ".db";
+    QString database = CSettings::instance().getConfPath() + "/" + info.fileName() + ".db";
 
     if(QFile::exists(database)){
         QFile file(database);

@@ -10,8 +10,11 @@ int main(int argc, char* argv[])
     if(argc < 2)
     {
         cout << "usage: " <<  argv[0] << " <-init|-check>" << endl;
-       // return -1;
+        return -1;
     }
+
+    QString confPath = "C:/Users/test/Documents/secnsafe";
+    //QString confPath = "/etc/secnsafe";
 
     QTextCodec *codec = QTextCodec::codecForName("utf-8");
     QTextCodec::setCodecForCStrings(codec);
@@ -20,35 +23,29 @@ int main(int argc, char* argv[])
 
     CFilesAnalize *analizator = new CFilesAnalize();
     CReport *report           = new CReport();
+    CSettings &settings       = CSettings::instance();
 
-    //CSettings::instance().loadSettings("/etc/secnsafe/secnsafe.conf");
-    //CSettings::instance().setValue("dbfolder","/etc/secnsafe"
-
-    CSettings::instance().loadSettings("C:/Users/test/Documents/secnsafe/secnsafe.conf");
-    CSettings::instance().setValue("dbfolder","C:/Users/test/Documents/secnsafe/");
-return -1;
-
+    settings.setConfPath(confPath);
+    settings.loadSettings(confPath + "/secnsafe.conf");
 
     if(qstrcmp(argv[1],"-init") == 0) {
-        QStringList paths = CSettings::instance().getValue("path").split(",");
-        foreach(QString path,paths){
-            analizator->setFileTypes(CSettings::instance().getValue("filetypes"));
-            analizator->setExclusions(CSettings::instance().getValue("exclusions"));
+        foreach(QString path, settings.getPaths()){
+            analizator->setFileTypes(settings.getValue(path, "filetypes"));
+            analizator->setExclusions(settings.getValue(path, "exclusions"));
             analizator->getState(path);
         }
     }
     else if(qstrcmp(argv[1],"-check") == 0) {
-         QStringList paths = CSettings::instance().getValue("path").split(",");
-         foreach(QString path,paths){
-             analizator->setFileTypes(CSettings::instance().getValue("filetypes"));
-             analizator->setExclusions(CSettings::instance().getValue("exclusions"));
-             analizator->checkState(path);
+            foreach(QString path, settings.getPaths()){
+                analizator->setFileTypes(settings.getValue(path, "filetypes"));
+                analizator->setExclusions(settings.getValue(path, "exclusions"));
+                analizator->checkState(path);
 
-             report->setAddedItems(analizator->getAddedItems());
-             report->setChangedItmes(analizator->getChangedItmes());
-             report->setDeletedItmes(analizator->getDeletedItmes());
+                report->setAddedItems(analizator->getAddedItems());
+                report->setChangedItmes(analizator->getChangedItmes());
+                report->setDeletedItmes(analizator->getDeletedItmes());
 
-             report->showReport();
+                report->showReport();
          }
     }
     else {

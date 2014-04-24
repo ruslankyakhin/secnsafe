@@ -14,43 +14,42 @@ CSettings& CSettings::instance()
 
 void CSettings::loadSettings(QString settingsFile)
 {
-    QStringList listPaths;
-
     if(QFile::exists(settingsFile)) {
-        QFile file(settingsFile);
-        if(file.open(QFile::ReadOnly) ) {
-            while(!file.atEnd()){
-                QString line = file.readLine();
-                QRegExp regExp(QRegExp::escape("[")+"(.*)"+QRegExp::escape("]"));
-
-                if(regExp.indexIn(line) != -1) {
-                    listPaths = regExp.cap(1).split(",");
-                }
-
-                QStringList keyValue = line.split("=");
-
-                if (keyValue.count() == 2)
-                {
-                    foreach(QString path, listPaths)
-                    {
-
-                    }
+        QSettings settings(settingsFile, QSettings::IniFormat);
+        foreach(QString group, settings.childGroups()) {
+            settings.beginGroup(group);
+            QString path = settings.value("path").toString();
+            QHash<QString,QString> keysValues;
+            foreach (QString key, settings.childKeys()) {
+                QString value = settings.value(key).toString();
+                if(path != value) {
+                    keysValues.insert(key,value);
                 }
             }
+            settings_.insert(path,keysValues);
+            settings.endGroup();
         }
-        file.close();
     }
     else {
         cout << "Settings file " + settingsFile.toStdString() + " should be available." << endl;
     }
 }
-QString CSettings::getValue(QString name)
+QString CSettings::getValue(QString path, QString name)
 {
    // return settings_[name].replace("\"","").trimmed();
     return "";
 }
 
-void CSettings::setValue(QString name, QString value)
+QStringList CSettings::getPaths()
 {
-    //settings_[name] = value;
+    return settings_.keys();
+}
+
+QString CSettings::getConfPath()
+{
+    return confPath;
+}
+void CSettings::setConfPath(QString path)
+{
+    confPath = path;
 }
